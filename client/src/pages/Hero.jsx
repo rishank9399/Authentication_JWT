@@ -14,7 +14,7 @@ const Hero = () => {
         navigate("/login");
       }
       const { data } = await axios.post(
-        import.meta.env.REACT_APP_HOME_ROUTE,
+        process.env.REACT_APP_HOME_ROUTE,
         {},
         { withCredentials: true }
       );

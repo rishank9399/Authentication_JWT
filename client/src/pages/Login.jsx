@@ -31,7 +31,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        import.meta.env.REACT_APP_LOGIN_ROUTE,
+        process.env.REACT_APP_LOGIN_ROUTE,
         {
           ...inputValue,
         },
