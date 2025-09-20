@@ -21,7 +21,7 @@ app.listen(PORT, () => {
 
 app.use(
   cors({
-    origin: [process.env.CORS_ORIGIN_SITE],
+    origin: process.env.CORS_ORIGIN_SITE,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

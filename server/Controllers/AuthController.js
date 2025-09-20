@@ -2,7 +2,6 @@ const User = require("../Models/UserModel");
 const { createSecretToken } = require("../util/SecretToken");
 const bcrypt = require("bcrypt");
 const express = require("express");
-const axios = require("axios");
 
 const app = express();
 app.use(express.json());
@@ -20,21 +19,6 @@ module.exports.Signup = async (req, res, next) => {
       withCredentials: true,
       httpOnly: false,
     });
-    await axios.post(
-      `https://graph.facebook.com/v21.0/710743975466175/messages`,
-      {
-        messaging_product: "whatsapp",
-        to: `91${phone}`,
-        type: "text",
-        text: { body: `Hi ${username}, thanks for submitting the form! 🎉` }
-      },
-      {
-        headers: {
-          Authorization: `Bearer EAASZAfddKLzgBPeKZBfsQSqSJ9gzhuf0FB5sEZCxP2sWjZBi33tWjUQCv2ldkalOndp7fLxGLZBTk0HdM0DkhFwKxIHkzEMGkqxf0suZCTjW0Ljvxeb0KQ3WYP57IvupmZAjOe7pErMGhdqFoMZCjdAuiOxuXC26Y9QkMPrr5NZBq44HcXe3q6FMFZBp7XAfgrZAIAC8Nym1yrZCcpZBbz835nbB7tViUo94x4ccawvHRPnJK0QZDZD`,
-          "Content-Type": "application/json"
-        }
-      }
-    )
     res
       .status(201)
       .json({ message: "User signed in successfully", success: true, user });
