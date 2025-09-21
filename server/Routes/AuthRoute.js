@@ -1,10 +1,11 @@
 const { Signup, Login, Logout } = require("../Controllers/AuthController");
-const {userVerification} = require("../Middlewares/AuthMiddleware")
+const {userVerification} = require("../Middlewares/AuthMiddleware");
+const { checkDatabaseConnection } = require("../Middlewares/DatabaseMiddleware");
 const router = require("express").Router();
 
-router.post("/signup", Signup);
-router.post('/login', Login);
+router.post("/signup", checkDatabaseConnection, Signup);
+router.post('/login', checkDatabaseConnection, Login);
 router.post('/logout', Logout);
-router.post('/verify', userVerification)
+router.post('/verify', checkDatabaseConnection, userVerification)
 
 module.exports = router; 
