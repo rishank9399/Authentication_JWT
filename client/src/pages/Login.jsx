@@ -22,10 +22,12 @@ const Login = () => {
     toast.error(err, {
       position: "bottom-left",
     });
-  const handleSuccess = (msg) =>
+  const handleSuccess = (msg) => {
     toast.success(msg, {
       position: "bottom-left",
     });
+    navigate("/")
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

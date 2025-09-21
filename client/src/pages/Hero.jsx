@@ -4,12 +4,33 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
+// function getCookie(name) {
+//   return document.cookie
+//     .split('; ')
+//     .find(row => row.startsWith(${encodeURIComponent(name)}=))
+//     ?.split('=').slice(1).join('=');
+// }
+
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find(row => row.startsWith(`${encodeURIComponent(name)}=`))
+    ?.split("=")
+    .slice(1)
+    .join("=");
+}
+
+
+
 const Hero = () => {
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
   useEffect(() => {
     const verifyCookie = async () => {
+      const token = getCookie('token');
+      console.log(cookies)
+      console.log(token)
       if (!cookies.token) {
         navigate("/login");
       }
@@ -32,6 +53,8 @@ const Hero = () => {
     removeCookie("token");
     navigate("/signup");
   };
+
+  
   return (
     <>
       <div className="home_page">
