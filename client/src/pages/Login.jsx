@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/axiosConfig";
 import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
@@ -32,13 +32,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        process.env.REACT_APP_LOGIN_ROUTE,
-        {
-          ...inputValue,
-        },
-        { withCredentials: true }
-      );
+      const { data } = await api.post("/login", {
+        ...inputValue,
+      });
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
@@ -49,7 +45,8 @@ const Login = () => {
         handleError(message);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Login error:", error);
+      handleError(error.response?.data?.message || "Login failed. Please try again.");
     }
     setInputValue({
       ...inputValue,

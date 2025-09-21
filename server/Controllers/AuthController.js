@@ -18,13 +18,22 @@ module.exports.Signup = async (req, res, next) => {
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
     });
     res
       .status(201)
       .json({ message: "User signed in successfully", success: true, user });
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Signup error:", error);
+    res.status(500).json({ 
+      message: "Internal server error during signup", 
+      success: false,
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 
@@ -46,10 +55,42 @@ module.exports.Login = async (req, res, next) => {
      res.cookie("token", token, {
        withCredentials: true,
        httpOnly: false,
+       secure: process.env.NODE_ENV === 'production',
+       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+       domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+       maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
      });
      res.status(201).json({ message: "User logged in successfully", success: true });
      next()
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error);
+    res.status(500).json({ 
+      message: "Internal server error during login", 
+      success: false,
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+module.exports.Logout = async (req, res, next) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
+    });
+    res.status(200).json({ 
+      message: "User logged out successfully", 
+      success: true 
+    });
+    next();
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ 
+      message: "Internal server error during logout", 
+      success: false,
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };

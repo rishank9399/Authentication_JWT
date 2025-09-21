@@ -45,9 +45,26 @@ const app = express();
 
 app.use(
   cors({
-    origin: [process.env.CORS_ORIGIN_SITE, "http://localhost:3000"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      const allowedOrigins = [
+        process.env.CORS_ORIGIN_SITE,
+        "http://localhost:3000",
+        "https://localhost:3000"
+      ];
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
+    optionsSuccessStatus: 200,
+    preflightContinue: false
   })
 );
 app.use(cookieParser());
