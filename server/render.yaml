@@ -1,0 +1,21 @@
+# Render deployment configuration
+services:
+  - type: web
+    name: authentication-jwt-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URL
+        sync: false
+      - key: TOKEN_KEY
+        sync: false
+      - key: CORS_ORIGIN_SITE
+        sync: false
+      - key: COOKIE_DOMAIN
+        value: .vercel.app

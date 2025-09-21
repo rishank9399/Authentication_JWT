@@ -52,12 +52,26 @@ app.use(
       const allowedOrigins = [
         process.env.CORS_ORIGIN_SITE,
         "http://localhost:3000",
-        "https://localhost:3000"
+        "https://localhost:3000",
+        // Vercel domains
+        /^https:\/\/.*\.vercel\.app$/,
+        /^https:\/\/.*\.vercel\.dev$/
       ];
       
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      // Check if origin matches any allowed origin (string or regex)
+      const isAllowed = allowedOrigins.some(allowedOrigin => {
+        if (typeof allowedOrigin === 'string') {
+          return allowedOrigin === origin;
+        } else if (allowedOrigin instanceof RegExp) {
+          return allowedOrigin.test(origin);
+        }
+        return false;
+      });
+      
+      if (isAllowed) {
         callback(null, true);
       } else {
+        console.log('CORS blocked origin:', origin);
         callback(new Error('Not allowed by CORS'));
       }
     },
